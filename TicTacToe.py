@@ -65,12 +65,17 @@ def getMove(plyr, validMove):
     else:
         prompt = 'Invalid! Try again'
     print (prompt+', Player '+plyr)
+    col, row = 'Z', '9'
     try:
-        col = input('What Column? (A,B,C or Q to quit) :')
-        if col.upper() != 'Q':
-            row = input('What Row? (1,2,3 or Q to quit)    :')
-            if row.upper() != 'Q':
-                move = col.upper()+row.upper()
+        while (len(col) != 1) or (col.upper() not in 'QABC'):
+            col = input('What Column, Player '+plyr+' ? (A,B,C or Q to quit) :')
+        col = col.upper()
+        if col != 'Q':
+            while (len(row) != 1) or (row.upper() not in 'Q123'):
+                row = input('In Column '+col+', what Row Player '+plyr+' ? (1,2,3 or Q to quit)    :')
+            row = row.upper()
+            if row != 'Q':
+                move = col+row
     except:
         print('OOOPS! error')
         
