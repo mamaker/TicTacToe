@@ -1,6 +1,6 @@
 
 
-def drawBoard(board, labels):
+def drawBoard(board, labels = ("ABC", "123")):
     """ Draws Game board """
 ##for row in board:
 ##    print(row)
@@ -59,7 +59,7 @@ def checkWinner(board, plyr):
         
     return winner
 
-def getMove(plyr, validMove, labels):
+def getMove(plyr, validMove, labels = ("ABC", "123")):
     move = 'Q'
     colNames, rowNames = labels
     
@@ -84,7 +84,7 @@ def getMove(plyr, validMove, labels):
         
     return move
 
-def parseMove(plyr, nextMove, board, labels):
+def parseMove(plyr, nextMove, board, labels = ("ABC", "123")):
     """ Parses the Move """
     goodMove = False
     blnk = ' '
