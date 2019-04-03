@@ -68,11 +68,11 @@ def getMove(plyr, validMove):
     col, row = 'Z', '9'
     try:
         while (len(col) != 1) or (col.upper() not in 'QABC'):
-            col = input('What Column, Player '+plyr+' ? (A,B,C or Q to quit) :')
+            col = input('What Column, Player '+plyr+' ? (A,B,C or Q to quit): ')
         col = col.upper()
         if col != 'Q':
             while (len(row) != 1) or (row.upper() not in 'Q123'):
-                row = input('In Column '+col+', what Row Player '+plyr+' ? (1,2,3 or Q to quit)    :')
+                row = input('In Column '+col+', what Row Player '+plyr+' ? (1,2,3 or Q to quit): ')
             row = row.upper()
             if row != 'Q':
                 move = col+row
@@ -82,15 +82,26 @@ def getMove(plyr, validMove):
     return move
 
 def parseMove(plyr, nextMove, board):
+    """ Parses the Move """
     goodMove = False
     blnk = ' '
+    colNames, rowNames = "ABC", "123"
+    
+    if len(nextMove) == 2:
+        colChoice, rowChoice = tuple(nextMove)
+    colDic, rowDic = {}, {}
     try:
-        if len(plyr) == 1 and len(nextMove) == 2:
-            col = 'ABC'.index(nextMove[0])
-            row = int(nextMove[1])-1
-            if (row >=0 and row <= 2) and (col >=0 and col <= 2) and (board[row][col] == blnk):
-                board[row][col] = plyr
-                goodMove = True
+        for pair in enumerate(colNames):
+            colDic[pair[1]] =  pair[0]
+        col = colDic[colChoice]
+
+        for pair in enumerate(rowNames):
+            rowDic[pair[1]] =  pair[0]
+        row = rowDic[rowChoice]
+        
+        if board[row][col] == blnk:
+            board[row][col] = plyr
+            goodMove = True
     except:
         print('OOOPS! error')
     return goodMove
