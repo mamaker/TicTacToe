@@ -51,11 +51,10 @@ def checkWinner(board, plyr):
         leftDiag = (board[0][0],board[1][1],board[2][2])
         if leftDiag == winX:
             winner = True
-
-    if not winner:
-        rightDiag = (board[0][2],board[1][1],board[2][0])
-        if rightDiag == winX:
-            winner = True
+        else:
+            rightDiag = (board[0][2],board[1][1],board[2][0])
+            if rightDiag == winX:
+                winner = True
         
     return winner
 

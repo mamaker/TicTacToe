@@ -24,13 +24,12 @@ def checkWinner(board, plyr):
         if leftDiag == winX:
             print('Winner: {}'.format(leftDiag))
             winner = True
-
-    if not winner:
-        rightDiag = (board[0][2],board[1][1],board[2][0])
-        print('right Diag:{}'.format(rightDiag))
-        if rightDiag == winX:
-            print('Winner: {}'.format(rightDiag))
-            winner = True
+        else:
+            rightDiag = (board[0][2],board[1][1],board[2][0])
+            print('right Diag:{}'.format(rightDiag))
+            if rightDiag == winX:
+                print('Winner: {}'.format(rightDiag))
+                winner = True
         
     return winner
 
@@ -41,11 +40,11 @@ plr = " "
 ##board = [[plr,"X",plr],
 ##         [plr,"X",plr],
 ##         [plr,"X",plr]]
-##board = [[plr,plr,"X"],
-##         [plr,"X",plr],
-##         ["X",plr,plr]]
 board = [[plr,plr,"X"],
-         [plr,plr,plr],
-         ["X",plr,"X"]]
+         [plr,"X",plr],
+         ["X",plr,plr]]
+##board = [[plr,plr,"X"],
+##         [plr,plr,plr],
+##         ["X",plr,"X"]]
 winner = checkWinner(board,"X")
 print(winner)
