@@ -1,6 +1,6 @@
 
 
-def drawBoard(board):
+def drawBoard(board, labels):
     """ Draws Game board """
 ##for row in board:
 ##    print(row)
@@ -10,9 +10,10 @@ def drawBoard(board):
 ##print(' 0 | 0 | 0 ') 
 ##print('---|---|---')
 ##print(' 0 | 0 | 0 ')
+    colNames, rowNames = labels
     print(' ')
     print(' '*10 +'C O L U M N')
-    print(' '*11 +'A   B   C')
+    print(' '*11 +'{0}   {1}   {2}'.format(colNames[0],colNames[1],colNames[2]))
     print(' ')
     j = 0
     for row in board:
@@ -20,7 +21,7 @@ def drawBoard(board):
         for i in row:
             j += 1
             if j % 3 == 1:
-                x +='Row {}'.format(int(j/3)+1)+ ' '*5
+                x +='Row {}'.format(rowNames[int(j/3)])+ ' '*5
             x += ' {0} '.format(i)
             if j % 3 != 0:
                 x += '|'
@@ -58,8 +59,10 @@ def checkWinner(board, plyr):
         
     return winner
 
-def getMove(plyr, validMove):
+def getMove(plyr, validMove, labels):
     move = 'Q'
+    colNames, rowNames = labels
+    
     if validMove:
         prompt = 'Your turn'
     else:
@@ -67,12 +70,12 @@ def getMove(plyr, validMove):
     print (prompt+', Player '+plyr)
     col, row = 'Z', '9'
     try:
-        while (len(col) != 1) or (col.upper() not in 'QABC'):
-            col = input('What Column, Player '+plyr+' ? (A,B,C or Q to quit): ')
+        while (len(col) != 1) or (col.upper() not in 'Q'+colNames):
+            col = input('What Column, Player '+plyr+' ? ({0},{1},{2} or Q to quit): '.format(colNames[0],colNames[1],colNames[2]))
         col = col.upper()
         if col != 'Q':
-            while (len(row) != 1) or (row.upper() not in 'Q123'):
-                row = input('In Column '+col+', what Row Player '+plyr+' ? (1,2,3 or Q to quit): ')
+            while (len(row) != 1) or (row.upper() not in 'Q'+rowNames):
+                row = input('In Column '+col+', what Row Player '+plyr+' ? ({0},{1},{2} or Q to quit): '.format(rowNames[0],rowNames[1],rowNames[2]))
             row = row.upper()
             if row != 'Q':
                 move = col+row
@@ -81,11 +84,11 @@ def getMove(plyr, validMove):
         
     return move
 
-def parseMove(plyr, nextMove, board):
+def parseMove(plyr, nextMove, board, labels):
     """ Parses the Move """
     goodMove = False
     blnk = ' '
-    colNames, rowNames = "ABC", "123"
+    colNames, rowNames = labels
     
     if len(nextMove) == 2:
         colChoice, rowChoice = tuple(nextMove)
@@ -128,9 +131,11 @@ board = [[blnk,blnk,blnk],
 winner = False
 goodMove = True
 plyr = "O"
+labels = ("ABC", "123")
+colNames, rowNames = labels
 while not winner: 
-    drawBoard(board)
-    winner = checkWinner(board,plyr)
+    drawBoard(board, labels)
+    winner = checkWinner(board, plyr)
     if winner:
         declareWinner(plyr)
         nextMove = "Q"
@@ -140,9 +145,9 @@ while not winner:
                 plyr = "O"
             else:
                 plyr = "X"
-        nextMove = getMove(plyr, goodMove)
+        nextMove = getMove(plyr, goodMove, labels)
     if nextMove.upper() != 'Q':
-        goodMove = parseMove(plyr, nextMove, board)
+        goodMove = parseMove(plyr, nextMove, board, labels)
     else:
         sayBye()
         winner = True
