@@ -35,46 +35,26 @@ def drawBoard(board):
 def checkWinner(board, plyr):
     """Checks for winner, given board and player"""
     winX = (plyr,plyr,plyr)
-    (col1, col2, col3) = ([],[],[])
-    (diag1, diag2) = ([],[])
     winner = False
-    j = 1
-    for row in board:
-        if tuple(row) == winX:
+
+    for i in range(3):
+        row = (board[i][0],board[i][1],board[i][2])
+        if row == winX:
             winner = True
             break
-        for col in row:
-            if j % 3 == 1:
-                col1.append(col)
-                if j == 1:
-                    diag1.append(col)
-                elif j == 7:
-                    diag2.append(col)
-            elif j % 3 == 2:
-                col2.append(col)
-                if j == 5:
-                    diag1.append(col)
-                    diag2.append(col)
-            else:
-                col3.append(col)
-                if j == 3:
-                    diag2.append(col)
-                elif j == 9:
-                    diag1.append(col)
-            j += 1
-            
+        col = (board[0][i],board[1][i],board[2][i])
+        if col == winX:
+            winner = True
+            break
+
     if not winner:
-        if tuple(col1) == winX:
-            winner = True
-        elif tuple(col2) == winX:
-            winner = True
-        elif tuple(col3) == winX:
+        leftDiag = (board[0][0],board[1][1],board[2][2])
+        if leftDiag == winX:
             winner = True
 
     if not winner:
-        if tuple(diag1) == winX:
-            winner = True
-        elif tuple(diag2) == winX:
+        rightDiag = (board[0][2],board[1][1],board[2][0])
+        if rightDiag == winX:
             winner = True
         
     return winner
