@@ -91,6 +91,11 @@ def checkWinner(board, plyr):
 def getMove(plyr, validMove, labels = ("ABC", "123")):
     move = 'Q'
     colNames, rowNames = labels
+    colOpts,rowOpts = '',''
+    for col in colNames:
+        colOpts += col+','
+    for row in rowNames:
+        rowOpts += col+','
     
     if validMove:
         prompt = 'Your turn'
@@ -100,11 +105,11 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
     col, row = 'Z', '9'
     try:
         while (len(col) != 1) or (col.upper() not in 'Q'+colNames):
-            col = input('What Column, Player '+plyr+' ? ({0},{1},{2} or Q to quit): '.format(colNames[0],colNames[1],colNames[2]))
+            col = input('What Column, Player '+plyr+' ? ('+colOpts+' or Q to quit): ')
         col = col.upper()
         if col != 'Q':
             while (len(row) != 1) or (row.upper() not in 'Q'+rowNames):
-                row = input('In Column '+col+', what Row Player '+plyr+' ? ({0},{1},{2} or Q to quit): '.format(rowNames[0],rowNames[1],rowNames[2]))
+                row = input('In Column '+col+', what Row Player '+plyr+' ? ('+rowOpts+' or Q to quit): ')
             row = row.upper()
             if row != 'Q':
                 move = col+row
