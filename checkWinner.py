@@ -1,50 +1,65 @@
 def checkWinner(board, plyr):
     """Checks for winner, given board and player"""
-    winX = (plyr,plyr,plyr)
     winner = False
+    winX = []
+    sideLen = len(board)
+    for i in range(sideLen):
+        winX.append(plyr)
+    winX = tuple(winX)
     print('WinX: {}'.format(winX))
 
-    for i in range(3):
-        row = (board[i][0],board[i][1],board[i][2])
-        print('Row {0}:{1}'.format(i,row))
-        if row == winX:
+    for row in board:
+        print('Row :{0}'.format(row))
+        if tuple(row) == winX:
             print('Winner: {}'.format(row))
             winner = True
             break
-        col = (board[0][i],board[1][i],board[2][i])
-        print('Col {0}:{1}'.format(i,col))
-        if col == winX:
+
+    for i in range(sideLen):
+        col = []
+        for j in range(sideLen):
+            col.append(board[j][i])
+        print('Col {0}'.format(col))
+        if tuple(col) == winX:
             print('Winner: {}'.format(col))
             winner = True
             break
 
     if not winner:
-        leftDiag = (board[0][0],board[1][1],board[2][2])
+        leftDiag = []
+        for i in range(sideLen):
+            leftDiag.append(board[i][i])
         print('left Diag:{}'.format(leftDiag))
-        if leftDiag == winX:
+        if tuple(leftDiag) == winX:
             print('Winner: {}'.format(leftDiag))
             winner = True
         else:
-            rightDiag = (board[0][2],board[1][1],board[2][0])
+            rightDiag = []
+            for i in range(sideLen):
+                rightDiag.append(board[i][sideLen-1-i])
             print('right Diag:{}'.format(rightDiag))
-            if rightDiag == winX:
+            if tuple(rightDiag) == winX:
                 print('Winner: {}'.format(rightDiag))
                 winner = True
         
     return winner
 
 plr = " "
-##board = [[plr,plr,plr],
-##         ["X","X","X"],
-##         [plr,plr,plr]]
-##board = [[plr,"X",plr],
-##         [plr,"X",plr],
-##         [plr,"X",plr]]
-board = [[plr,plr,"X"],
-         [plr,"X",plr],
-         ["X",plr,plr]]
-##board = [[plr,plr,"X"],
-##         [plr,plr,plr],
-##         ["X",plr,"X"]]
+##board = [[plr,plr,plr,plr],
+##         ["X","X","X","X"],
+##         [plr,plr,plr,plr],
+##         [plr,plr,plr,plr]]
+board = [[plr,"X",plr,plr],
+         [plr,"X",plr,plr],
+         [plr,"X",plr,plr],
+         [plr,"X",plr,plr]]
+##board = [[plr,plr,plr,"X"],
+##         [plr,plr,"X",plr],
+##         [plr,"X",plr,plr],
+##         ["X",plr,plr,plr]]
+##board = [["X",plr,plr,plr],
+##         [plr,"X",plr,plr],
+##         [plr,plr,"X",plr],
+##         [plr,plr,plr,"X"]]
 winner = checkWinner(board,"X")
 print(winner)

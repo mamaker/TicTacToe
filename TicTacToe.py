@@ -53,26 +53,37 @@ def drawBoard(board, labels = ("ABC", "123")):
 
 def checkWinner(board, plyr):
     """Checks for winner, given board and player"""
-    winX = (plyr,plyr,plyr)
     winner = False
+    winX = []
+    sideLen = len(board)
+    for i in range(sideLen):
+        winX.append(plyr)
+    winX = tuple(winX)
 
-    for i in range(3):
-        row = (board[i][0],board[i][1],board[i][2])
-        if row == winX:
+    for row in board:
+        if tuple(row) == winX:
             winner = True
             break
-        col = (board[0][i],board[1][i],board[2][i])
-        if col == winX:
+
+    for i in range(sideLen):
+        col = []
+        for j in range(sideLen):
+            col.append(board[j][i])
+        if tuple(col) == winX:
             winner = True
             break
 
     if not winner:
-        leftDiag = (board[0][0],board[1][1],board[2][2])
-        if leftDiag == winX:
+        leftDiag = []
+        for i in range(sideLen):
+            leftDiag.append(board[i][i])
+        if tuple(leftDiag) == winX:
             winner = True
         else:
-            rightDiag = (board[0][2],board[1][1],board[2][0])
-            if rightDiag == winX:
+            rightDiag = []
+            for i in range(sideLen):
+                rightDiag.append(board[i][sideLen-1-i])
+            if tuple(rightDiag) == winX:
                 winner = True
         
     return winner
