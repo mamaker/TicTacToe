@@ -181,14 +181,7 @@ def getSize():
 sideLen = getSize()
 if sideLen > 2 and sideLen < 10:
     blnk = ' '
-    ##board = [[blnk,blnk,blnk,blnk,],
-    ##        [blnk,blnk,blnk,blnk,],
-    ##        [blnk,blnk,blnk,blnk,],
-    ##        [blnk,blnk,blnk,blnk,]]
-    board = [[[blnk] for i in range(sideLen)] for j in range(sideLen)]
-    for i in range(sideLen):
-        for j in range(sideLen):
-            board[i][j] = blnk
+    board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
 
     colNames = 'ABCDEFGHI'[:sideLen]
     rowNames = '123456789'[:sideLen]
