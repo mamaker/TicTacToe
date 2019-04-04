@@ -20,7 +20,7 @@ def drawBoard(board, labels = ("ABC", "123")):
     
     if lhs == rhs:
         print(' ')
-        print(' '*10 +'C O L U M N')
+        print(' '*10 +'C O L U M N S')
         colHead = ''
         for col in colNames:
             colHead += col+(' '*3)

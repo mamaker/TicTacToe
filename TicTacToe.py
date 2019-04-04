@@ -20,7 +20,7 @@ def drawBoard(board, labels = ("ABC", "123")):
     
     if lhs == rhs:
         print(' ')
-        print(' '*10 +'C O L U M N')
+        print(' '*10 +'C O L U M N S')
         colHead = ''
         for col in colNames:
             colHead += col+(' '*3)
@@ -47,6 +47,7 @@ def drawBoard(board, labels = ("ABC", "123")):
                                 divider += '|'
                         print(divider)
         print(' ')
+
     else:
         print('Sorry, can only draw square gameboards.')
     return
@@ -95,7 +96,7 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
     for col in colNames:
         colOpts += col+','
     for row in rowNames:
-        rowOpts += col+','
+        rowOpts += row+','
     
     if validMove:
         prompt = 'Your turn'
@@ -115,7 +116,7 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
                 move = col+row
     except:
         print('OOOPS! error')
-        
+
     return move
 
 def parseMove(plyr, nextMove, board, labels = ("ABC", "123")):
@@ -141,6 +142,7 @@ def parseMove(plyr, nextMove, board, labels = ("ABC", "123")):
             goodMove = True
     except:
         print('OOOPS! error')
+
     return goodMove
 
 def declareWinner(plyr):
@@ -158,15 +160,26 @@ def sayBye():
     print(' ')
     return
 
+
+
+sideLen = 4
 blnk = ' '
-board = [[blnk,blnk,blnk],
-        [blnk,blnk,blnk],
-        [blnk,blnk,blnk]]
-winner = False
+##board = [[blnk,blnk,blnk,blnk,],
+##        [blnk,blnk,blnk,blnk,],
+##        [blnk,blnk,blnk,blnk,],
+##        [blnk,blnk,blnk,blnk,]]
+board = [[[blnk] for i in range(sideLen)] for j in range(sideLen)]
+for i in range(sideLen):
+    for j in range(sideLen):
+        board[i][j] = blnk
+
+colNames = 'ABCDEFGHI'[:sideLen]
+rowNames = '123456789'[:sideLen]
+
+labels = (colNames, rowNames)
+winner = not (len(colNames) == len(rowNames))
 goodMove = True
 plyr = "O"
-labels = ("ABC", "123")
-colNames, rowNames = labels
 while not winner: 
     drawBoard(board, labels)
     winner = checkWinner(board, plyr)
