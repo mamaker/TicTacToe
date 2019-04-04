@@ -160,44 +160,65 @@ def sayBye():
     print(' ')
     return
 
+def getSize():
+    size = 0
+    sizes = '3456789'
+    sizOpts = ''
+    for siz in sizes:
+        sizOpts += siz+','
+    siz = '1'
+    try:
+        while (len(siz) != 1) or (siz not in 'Qq'+sizes):
+            siz = input('What size Game board? ('+sizOpts+' or Q to quit): ')
+        if siz.upper() != 'Q':
+            size = int(siz)
+    except:
+        print('OOOPS! error')
+
+    return size
 
 
-sideLen = 4
-blnk = ' '
-##board = [[blnk,blnk,blnk,blnk,],
-##        [blnk,blnk,blnk,blnk,],
-##        [blnk,blnk,blnk,blnk,],
-##        [blnk,blnk,blnk,blnk,]]
-board = [[[blnk] for i in range(sideLen)] for j in range(sideLen)]
-for i in range(sideLen):
-    for j in range(sideLen):
-        board[i][j] = blnk
 
-colNames = 'ABCDEFGHI'[:sideLen]
-rowNames = '123456789'[:sideLen]
+#sideLen = 4
+sideLen = getSize()
+if sideLen > 2 and sideLen < 10:
+    blnk = ' '
+    ##board = [[blnk,blnk,blnk,blnk,],
+    ##        [blnk,blnk,blnk,blnk,],
+    ##        [blnk,blnk,blnk,blnk,],
+    ##        [blnk,blnk,blnk,blnk,]]
+    board = [[[blnk] for i in range(sideLen)] for j in range(sideLen)]
+    for i in range(sideLen):
+        for j in range(sideLen):
+            board[i][j] = blnk
 
-labels = (colNames, rowNames)
-winner = not (len(colNames) == len(rowNames))
-goodMove = True
-plyr = "O"
-while not winner: 
-    drawBoard(board, labels)
-    winner = checkWinner(board, plyr)
-    if winner:
-        declareWinner(plyr)
-        nextMove = "Q"
-    else:
-        if goodMove:
-            if plyr == "X":
-                plyr = "O"
-            else:
-                plyr = "X"
-        nextMove = getMove(plyr, goodMove, labels)
-    if nextMove.upper() != 'Q':
-        goodMove = parseMove(plyr, nextMove, board, labels)
-    else:
-        sayBye()
-        winner = True
+    colNames = 'ABCDEFGHI'[:sideLen]
+    rowNames = '123456789'[:sideLen]
+
+    labels = (colNames, rowNames)
+    winner = not (len(colNames) == len(rowNames))
+    goodMove = True
+    plyr = "O"
+    while not winner: 
+        drawBoard(board, labels)
+        winner = checkWinner(board, plyr)
+        if winner:
+            declareWinner(plyr)
+            nextMove = "Q"
+        else:
+            if goodMove:
+                if plyr == "X":
+                    plyr = "O"
+                else:
+                    plyr = "X"
+            nextMove = getMove(plyr, goodMove, labels)
+        if nextMove.upper() != 'Q':
+            goodMove = parseMove(plyr, nextMove, board, labels)
+        else:
+            sayBye()
+            winner = True
         
+else:
+    print('Sorry, Hope to see you again.')
         
         
