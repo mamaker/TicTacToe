@@ -13,11 +13,9 @@ def drawBoard(board, labels = ("ABC", "123")):
 #print(len(board[0]))
     colNames, rowNames = labels
     sideLen = len(colNames)
-    boardLen = len(board)
-    boardwidth = len(board[0])
+
     lhs = (sideLen, sideLen, sideLen)
     rhs = (len(rowNames), len(board), len(board[0]))
-    
     if lhs == rhs:
         print(' ')
         print(' '*10 +'C O L U M N S')
@@ -102,15 +100,15 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
         prompt = 'Your turn'
     else:
         prompt = 'Invalid! Try again'
-    print (prompt+', Player '+plyr)
+    print (prompt,', Player',plyr)
     col, row = 'Z', '9'
     try:
         while (len(col) != 1) or (col.upper() not in 'Q'+colNames):
-            col = input('What Column, Player '+plyr+' ? ('+colOpts+' or Q to quit): ')
+            col = input('What Column, Player {0} ? ({1} or Q to quit): '.format(plyr,colOpts))
         col = col.upper()
         if col != 'Q':
             while (len(row) != 1) or (row.upper() not in 'Q'+rowNames):
-                row = input('In Column '+col+', what Row Player '+plyr+' ? ('+rowOpts+' or Q to quit): ')
+                row = input('In Column {0}, what Row Player {1} ? ({2} or Q to quit): '.format(col, plyr,rowOpts))
             row = row.upper()
             if row != 'Q':
                 move = col+row
@@ -147,7 +145,7 @@ def parseMove(plyr, nextMove, board, labels = ("ABC", "123")):
 
 def declareWinner(plyr):
     print(' ')
-    print('Congratulations, Player '+plyr)
+    print('Congratulations, Player',plyr)
     print('You have WON!')
     print(' ')
     return
@@ -169,7 +167,7 @@ def getSize():
     siz = '1'
     try:
         while (len(siz) != 1) or (siz not in 'Qq'+sizes):
-            siz = input('What size Game board? ('+sizOpts+' or Q to quit): ')
+            siz = input('What size Game board? {0} or Q to quit): '.format(sizOpts))
         if siz.upper() != 'Q':
             size = int(siz)
     except:
