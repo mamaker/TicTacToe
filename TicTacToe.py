@@ -3,15 +3,13 @@
 
 def drawBoard(board, labels = ("ABC", "123")):
     """ Draws Game board """
-##for row in board:
-##    print(row)
 ##
-##print(' 0 | 0 | 0 ') 
+##print(' X | O | O ') 
 ##print('---|---|---')
-##print(' 0 | 0 | 0 ') 
+##print(' O | X | O ') 
 ##print('---|---|---')
-##print(' 0 | 0 | 0 ')
-#print(len(board[0]))
+##print(' O | O | X ')
+#
     colNames, rowNames = labels
     sideLen = len(colNames)
 
@@ -89,32 +87,22 @@ def checkWinner(board, plyr):
     return winner
 
 def getMove(plyr, validMove, labels = ("ABC", "123")):
+    """Gets the player's next move.""" 
+    
     move = 'Q'
     colNames, rowNames = labels
-    colOpts,rowOpts = '',''
-    for col in colNames:
-        colOpts += col+','
-    for row in rowNames:
-        rowOpts += row+','
-    
+    prompt = 'Invalid! Try again'
     if validMove:
         prompt = 'Your turn'
-    else:
-        prompt = 'Invalid! Try again'
     print (prompt,', Player',plyr)
     col, row = '', ''
-    try:
-        while (len(col) != 1) or (col.upper() not in 'Q'+colNames):
-            col = input('What Column, Player {0} ? ({1} or Q to quit): '.format(plyr,colOpts))
-        col = col.upper()
-        if col != 'Q':
-            while (len(row) != 1) or (row.upper() not in 'Q'+rowNames):
-                row = input('In Column {0}, what Row Player {1} ? ({2} or Q to quit): '.format(col, plyr,rowOpts))
-            row = row.upper()
-            if row != 'Q':
-                move = col+row
-    except:
-        print('OOOPS! error')
+    prompt = 'What Column, Player '+plyr+' ?'
+    col = getChoice(prompt,colNames)
+    if col != 'Q':
+        prompt = 'In Column '+col+', what Row Player '+plyr+' ?'
+        row = getChoice(prompt,rowNames)
+        if row != 'Q':
+            move = col+row
 
     return move
 
@@ -159,20 +147,24 @@ def sayBye():
     print(' ')
     return
 
+def getChoice(prompt, options):
+    choice = ''
+    try:
+        while (len(choice) != 1) or (choice.upper() not in tuple(options+'Q')):
+            choice = input('{0} {1} or Q to quit: '.format(prompt,tuple(options)))
+    except:
+        print('OOOPS! error')
+        choice = 'Q'
+        
+    return choice.upper()
+
 def getSize():
     size = 0
     sizes = '3456789'
-    sizOpts = ''
-    for siz in sizes:
-        sizOpts += siz+','
-    siz = ''
-    try:
-        while (len(siz) != 1) or (siz not in 'Qq'+sizes):
-            siz = input('What size Game board? {0} or Q to quit): '.format(sizOpts))
-        if siz.upper() != 'Q':
-            size = int(siz)
-    except:
-        print('OOOPS! error')
+    siz = getChoice('What size Game board?', sizes)
+    
+    if len(siz) == 1 and siz != 'Q':
+        size = int(siz)
 
     return size
 
