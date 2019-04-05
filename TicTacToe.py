@@ -51,6 +51,7 @@ def drawBoard(board, labels = ("ABC", "123")):
 
 def checkWinner(board, plyr):
     """Checks for winner, given board and player"""
+    
     winner = False
     winX = []
     sideLen = len(board)
@@ -86,15 +87,21 @@ def checkWinner(board, plyr):
         
     return winner
 
-def getMove(plyr, validMove, labels = ("ABC", "123")):
+
+def getMove(plyr, validMove, newGame, labels = ("ABC", "123")):
     """Gets the player's next move.""" 
     
     move = 'Q'
     colNames, rowNames = labels
-    prompt = 'Invalid! Try again'
-    if validMove:
+    if newGame:
+        prompt = 'Welcome'
+    elif validMove:
         prompt = 'Your turn'
-    print (prompt,', Player',plyr)
+    else:
+        prompt = 'Invalid! Try again'
+
+    print(prompt+', Player',plyr)
+    
     col, row = '', ''
     prompt = 'What Column, Player '+plyr+' ?'
     col = getChoice(prompt,colNames)
@@ -106,33 +113,41 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
 
     return move
 
-def parseMove(plyr, nextMove, board, labels = ("ABC", "123")):
-    """ Parses the Move """
+def makeMove(plyr, nextMove, board, labels = ("ABC", "123")):
+    """ Parses the Move and 
+        if good move
+            update the game board 
+            and return True """
+    
     goodMove = False
     blnk = ' '
     colNames, rowNames = labels
     
     if len(nextMove) == 2:
         colChoice, rowChoice = tuple(nextMove)
-    colDic, rowDic = {}, {}
-    try:
-        for pair in enumerate(colNames):
-            colDic[pair[1]] =  pair[0]
-        col = colDic[colChoice]
-
-        for pair in enumerate(rowNames):
-            rowDic[pair[1]] =  pair[0]
-        row = rowDic[rowChoice]
-        
-        if board[row][col] == blnk:
-            board[row][col] = plyr
-            goodMove = True
-    except:
-        print('OOOPS! error')
+        colDic, rowDic = {}, {}
+        try:
+            for pair in enumerate(colNames):
+                colDic[pair[1]] =  pair[0]
+            col = colDic[colChoice]
+    
+            for pair in enumerate(rowNames):
+                rowDic[pair[1]] =  pair[0]
+            row = rowDic[rowChoice]
+            
+            if board[row][col] == blnk:
+                board[row][col] = plyr
+                goodMove = True
+        except:
+            print('OOOPS! error')
 
     return goodMove
 
-def declareWinner(plyr):
+
+def declareWinner(plyr, board, labels):
+    """ declare Winner """
+    
+    drawBoard(board, labels)
     print(' ')
     print('Congratulations, Player',plyr)
     print('You have WON!')
@@ -141,13 +156,29 @@ def declareWinner(plyr):
 
 
 def sayBye():
+    """ Wish Goodbye """
+
     print(' ')
-    print('Thanks for Playing.')
-    print('Do play again!')
+    print('Thanks for Trying.')
+    print('Hope to see you again.')
     print(' ')
     return
 
+
+def blankBoard(board):
+    """ Blank out the Gameboard """
+
+    blnk = ' '
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            board[i][j] = blnk
+            
+    return True
+
+
 def getChoice(prompt, options):
+    """ Get input from User """
+
     choice = ''
     try:
         while (len(choice) != 1) or (choice.upper() not in tuple(options+'Q')):
@@ -157,6 +188,7 @@ def getChoice(prompt, options):
         choice = 'Q'
         
     return choice.upper()
+
 
 def getSize():
     size = 0
@@ -175,37 +207,29 @@ def main():
     #sideLen = 4
     sideLen = getSize()
     if sideLen > 2 and sideLen < 10:
-        blnk = ' '
-        board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
-    
         colNames = 'ABCDEFGHI'[:sideLen]
         rowNames = '123456789'[:sideLen]
-    
         labels = (colNames, rowNames)
-        winner = not (len(colNames) == len(rowNames))
-        goodMove = True
-        plyr = "O"
-        while not winner: 
+        blnk = ' '
+        board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
+        nxtPlyr = {"X":"O","O":"X"}
+        plyr = "X"
+        validMove = False
+        newGame = True
+        nextMove = ''
+        while nextMove != 'Q': 
             drawBoard(board, labels)
-            winner = checkWinner(board, plyr)
-            if winner:
-                declareWinner(plyr)
-                nextMove = "Q"
-            else:
-                if goodMove:
-                    if plyr == "X":
-                        plyr = "O"
-                    else:
-                        plyr = "X"
-                nextMove = getMove(plyr, goodMove, labels)
-            if nextMove.upper() != 'Q':
-                goodMove = parseMove(plyr, nextMove, board, labels)
-            else:
-                sayBye()
-                winner = True
-            
-    else:
-        print('Sorry, Hope to see you again.')
+            nextMove = getMove(plyr, validMove, newGame, labels)
+            newGame = False
+            if nextMove != 'Q':
+                validMove = makeMove(plyr, nextMove, board, labels)
+                if validMove: 
+                    if checkWinner(board, plyr):
+                        declareWinner(plyr, board, labels)
+                        newGame = blankBoard(board)
+                        nextMove = getChoice('One more Game?','Yy')
+                    plyr = nxtPlyr[plyr]
+    sayBye()
    
          
 if __name__ == '__main__':
