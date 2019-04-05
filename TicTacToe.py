@@ -1,4 +1,5 @@
-
+""" Plays a game of Tic-Tac-Toe.
+    Gameboard size Configurable dynamically."""
 
 def drawBoard(board, labels = ("ABC", "123")):
     """ Draws Game board """
@@ -101,7 +102,7 @@ def getMove(plyr, validMove, labels = ("ABC", "123")):
     else:
         prompt = 'Invalid! Try again'
     print (prompt,', Player',plyr)
-    col, row = 'Z', '9'
+    col, row = '', ''
     try:
         while (len(col) != 1) or (col.upper() not in 'Q'+colNames):
             col = input('What Column, Player {0} ? ({1} or Q to quit): '.format(plyr,colOpts))
@@ -164,7 +165,7 @@ def getSize():
     sizOpts = ''
     for siz in sizes:
         sizOpts += siz+','
-    siz = '1'
+    siz = ''
     try:
         while (len(siz) != 1) or (siz not in 'Qq'+sizes):
             siz = input('What size Game board? {0} or Q to quit): '.format(sizOpts))
@@ -176,40 +177,45 @@ def getSize():
     return size
 
 
-
-#sideLen = 4
-sideLen = getSize()
-if sideLen > 2 and sideLen < 10:
-    blnk = ' '
-    board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
-
-    colNames = 'ABCDEFGHI'[:sideLen]
-    rowNames = '123456789'[:sideLen]
-
-    labels = (colNames, rowNames)
-    winner = not (len(colNames) == len(rowNames))
-    goodMove = True
-    plyr = "O"
-    while not winner: 
-        drawBoard(board, labels)
-        winner = checkWinner(board, plyr)
-        if winner:
-            declareWinner(plyr)
-            nextMove = "Q"
-        else:
-            if goodMove:
-                if plyr == "X":
-                    plyr = "O"
-                else:
-                    plyr = "X"
-            nextMove = getMove(plyr, goodMove, labels)
-        if nextMove.upper() != 'Q':
-            goodMove = parseMove(plyr, nextMove, board, labels)
-        else:
-            sayBye()
-            winner = True
-        
-else:
-    print('Sorry, Hope to see you again.')
-        
+def main():
+    """ Plays a game of Tic-Tac-Toe.
+        Gameboard size Configurable dynamically."""
+    #sideLen = 4
+    sideLen = getSize()
+    if sideLen > 2 and sideLen < 10:
+        blnk = ' '
+        board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
+    
+        colNames = 'ABCDEFGHI'[:sideLen]
+        rowNames = '123456789'[:sideLen]
+    
+        labels = (colNames, rowNames)
+        winner = not (len(colNames) == len(rowNames))
+        goodMove = True
+        plyr = "O"
+        while not winner: 
+            drawBoard(board, labels)
+            winner = checkWinner(board, plyr)
+            if winner:
+                declareWinner(plyr)
+                nextMove = "Q"
+            else:
+                if goodMove:
+                    if plyr == "X":
+                        plyr = "O"
+                    else:
+                        plyr = "X"
+                nextMove = getMove(plyr, goodMove, labels)
+            if nextMove.upper() != 'Q':
+                goodMove = parseMove(plyr, nextMove, board, labels)
+            else:
+                sayBye()
+                winner = True
+            
+    else:
+        print('Sorry, Hope to see you again.')
+   
+         
+if __name__ == '__main__':
+    main()
         
