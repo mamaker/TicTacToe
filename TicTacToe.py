@@ -1,5 +1,9 @@
 """ Plays a game of Tic-Tac-Toe.
-    Gameboard size Configurable dynamically."""
+    Gameboard size Configurable dynamically;
+    Players choose their own unique initials;
+    Continue playing with a new game after one is over.
+    (C) Madhu Vasudevan. 
+"""
 
 def drawBoard(board, labels = ("ABC", "123")):
     """ Draws Game board """
@@ -59,11 +63,13 @@ def checkWinner(board, plyr):
         winX.append(plyr)
     winX = tuple(winX)
 
+    # check for row match
     for row in board:
         if tuple(row) == winX:
             winner = True
             break
 
+    # check for column match
     for i in range(sideLen):
         col = []
         for j in range(sideLen):
@@ -72,6 +78,7 @@ def checkWinner(board, plyr):
             winner = True
             break
 
+    # check for diagonals match
     if not winner:
         leftDiag = []
         for i in range(sideLen):
@@ -88,36 +95,42 @@ def checkWinner(board, plyr):
     return winner
 
 
-def getMove(plyr, validMove, newGame, labels = ("ABC", "123")):
+def getMove(plyr, movesMade, labels = ("ABC", "123")):
     """Gets the player's next move.""" 
-    
-    move = 'Q'
-    colNames, rowNames = labels
-    if newGame:
-        prompt = 'Welcome'
-    elif validMove:
-        prompt = 'Your turn'
-    else:
-        prompt = 'Invalid! Try again'
 
-    print(prompt+', Player',plyr)
-    
+    move = ''
+    colNames, rowNames = labels
     col, row = '', ''
-    prompt = 'What Column, Player '+plyr+' ?'
-    col = getChoice(prompt,colNames)
-    if col != 'Q':
-        prompt = 'In Column '+col+', what Row Player '+plyr+' ?'
-        row = getChoice(prompt,rowNames)
-        if row != 'Q':
-            move = col+row
+    while move != 'Q' and move not in movesMade:
+        if len(movesMade) == 0:
+            prompt = 'Welcome'
+        else:
+            prompt = 'Your turn'
+        if move != '':
+            prompt = 'Invalid! Try again'
+        
+        move = 'Q'
+    
+        print(prompt+', Player',plyr)
+        prompt = 'What Column, Player '+plyr+' ?'
+        col = getChoice(prompt,colNames)
+        if col != 'Q':
+            prompt = 'In Column '+col+', what Row Player '+plyr+' ?'
+            row = getChoice(prompt,rowNames)
+            if row != 'Q':
+                move = col+row
+        if move != 'Q' and move not in movesMade:
+            movesMade.add(move)
+    
 
     return move
+
 
 def makeMove(plyr, nextMove, board, labels = ("ABC", "123")):
     """ Parses the Move and 
         if good move
-            update the game board 
-            and return True """
+            updates the game board 
+            and returns True """
     
     goodMove = False
     blnk = ' '
@@ -125,24 +138,17 @@ def makeMove(plyr, nextMove, board, labels = ("ABC", "123")):
     
     if len(nextMove) == 2:
         colChoice, rowChoice = tuple(nextMove)
-        colDic, rowDic = {}, {}
-        try:
-            for pair in enumerate(colNames):
-                colDic[pair[1]] =  pair[0]
-            col = colDic[colChoice]
-    
-            for pair in enumerate(rowNames):
-                rowDic[pair[1]] =  pair[0]
-            row = rowDic[rowChoice]
-            
-            if board[row][col] == blnk:
-                board[row][col] = plyr
-                goodMove = True
-        except:
-            print('OOOPS! error')
+        if colChoice in colNames and rowChoice in rowNames:
+            try:
+                col = colNames.index(colChoice)
+                row = rowNames.index(rowChoice)            
+                if board[row][col] == blnk:
+                    board[row][col] = plyr
+                    goodMove = True
+            except:
+                print('OOOPS! error')
 
     return goodMove
-
 
 def declareWinner(plyr, board, labels):
     """ declare Winner """
@@ -165,13 +171,16 @@ def sayBye():
     return
 
 
-def blankBoard(board):
+def blankBoard(board, movesMade):
     """ Blank out the Gameboard """
 
     blnk = ' '
     for i in range(len(board)):
         for j in range(len(board[i])):
             board[i][j] = blnk
+      
+    x = movesMade.copy()
+    movesMade.difference_update(x)
             
     return True
 
@@ -183,7 +192,7 @@ def getChoice(prompt, options, showOptions = ''):
     if showOptions == '':
         showOptions = options
     try:
-        while (len(choice) != 1) or (choice.upper() not in tuple(showOptions+'Q')):
+        while (len(choice) != 1) or (choice.upper() not in tuple(options+'Q')):
             choice = input('{0} {1} or Q to quit: '.format(prompt,tuple(showOptions)))
     except:
         print('OOOPS! error')
@@ -198,7 +207,7 @@ def getPlyrs():
 
     letrs1 = 'ABCDEFGHIJKLMNOPRSTUVWXYZ'
     showOpts = 'A>Z'
-    prompt = 'What unique alphabet Initial, Player#'
+    prompt = 'What unique alphabet Initial for Player#'
     initl1 = ''
     while initl1 == '' or initl1 not in letrs1+'Q': 
         initl1 = getChoice(prompt+' 1?',letrs1, showOpts)
@@ -215,6 +224,7 @@ def getPlyrs():
         letrs2 += letr    
     
     initl2 = initl1
+    prompt = 'Except '+initl1+', '+prompt
     while initl1 != 'Q' and initl2 != 'Q' and  (initl1 == initl2 or initl2 not in letrs2):
         initl2 = getChoice(prompt+' 2?',letrs2, showOpts)
         
@@ -249,23 +259,20 @@ def main():
             labels = (colNames, rowNames)
             blnk = ' '
             board = [[blnk for i in range(sideLen)] for j in range(sideLen)]
+            movesMade = set([])
             switchPlyr = {plr1:plr2,plr2:plr1}
             plyr = plr1
-            validMove = False
-            newGame = True
             nextMove = ''
             while nextMove != 'Q': 
                 drawBoard(board, labels)
-                nextMove = getMove(plyr, validMove, newGame, labels)
-                newGame = False
+                nextMove = getMove(plyr, movesMade, labels)
                 if nextMove != 'Q':
-                    validMove = makeMove(plyr, nextMove, board, labels)
-                    if validMove: 
-                        if checkWinner(board, plyr):
-                            declareWinner(plyr, board, labels)
-                            newGame = blankBoard(board)
-                            nextMove = getChoice('One more Game?','Yy')
-                        plyr = switchPlyr[plyr]
+                    makeMove(plyr, nextMove, board, labels)
+                    if checkWinner(board, plyr):
+                        declareWinner(plyr, board, labels)
+                        blankBoard(board, movesMade)
+                        nextMove = getChoice('One more Game?','Yy')
+                    plyr = switchPlyr[plyr]
     sayBye()
    
          
