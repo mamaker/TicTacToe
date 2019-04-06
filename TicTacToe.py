@@ -192,20 +192,6 @@ def getChoice(prompt, options, showOptions = ''):
     return choice.upper()
 
 
-def getChoice2(prompt, options):
-    """ Get input from User """
-
-    choice = ''
-    try:
-        while (len(choice) != 1) or (choice.upper() not in tuple(options+'Q')):
-            choice = input('{0} {1} or Q to quit: '.format(prompt,tuple(options)))
-    except:
-        print('OOOPS! error')
-        choice = 'Q'
-        
-    return choice.upper()
-
-
 def getPlyrs():
     """Allow players to choose unique initials
         for markup of individuals's position in Gameboard"""
@@ -234,26 +220,6 @@ def getPlyrs():
         
     return initl1,initl2
 
-
-def getPlyrs2():
-    """Allow players to choose initials
-        for markup of individuals's position in Gameboard"""
-    
-    letrs1 = 'ABCDEFGHIJKLMNOPRSTUVWXYZ'
-    prompt = 'What unique alphabet Initial, Player#'
-    initl1 = getChoice(prompt+' 1?',letrs1)
-    
-    x = list(letrs1+'Q')
-    del x[x.index(initl1)]
-    letrs2 = ''
-    for letr in x:
-        letrs2 += letr    
-
-    initl2 = initl1
-    while initl1 != 'Q' and initl2 != 'Q' and  initl1 == initl2:
-        initl2 = getChoice(prompt+' 2?',letrs2)
-        
-    return initl1,initl2
 
 def getSize():
     """ Allow user to choose the Gameboard size
