@@ -23,8 +23,9 @@ def drawBoard(board, labels = ("ABC", "123")):
         print(' ')
         print(' '*10 +'C O L U M N S')
         colHead = ''
-        for col in colNames:
-            colHead += col+(' '*3)
+#        for col in colNames:
+#            colHead += col+(' '*3)
+        colHead = (' '*3).join(colNames)
         print(' '*11 +colHead)
             
         print(' ')
@@ -172,13 +173,16 @@ def sayBye():
 
 
 def blankBoard(board, movesMade):
-    """ Blank out the Gameboard """
+    """ Blank out the Gameboard 
+        and blank out the movesMade set"""
 
+    #Blank out the Gameboard
     blnk = ' '
     for i in range(len(board)):
         for j in range(len(board[i])):
             board[i][j] = blnk
-      
+    
+    #blank out the movesMade set
     x = movesMade.copy()
     movesMade.difference_update(x)
             
@@ -216,16 +220,19 @@ def getPlyrs():
         showOpts = 'B>Z'
     elif initl1 == 'Z':
         showOpts = 'A>Y'
-        
-    x = list(letrs1+'Q')
-    del x[x.index(initl1)]
-    letrs2 = ''
-    for letr in x:
-        letrs2 += letr    
+  
+    try: 
+        if initl1 != 'Q':
+            x = list(letrs1)
+            del x[x.index(initl1)]
+            letrs2 = ''.join(x)
+    except:
+        print('OOOPS! error')
+        letrs2 = letrs1        
     
     initl2 = initl1
     prompt = 'Except '+initl1+', '+prompt
-    while initl1 != 'Q' and initl2 != 'Q' and  (initl1 == initl2 or initl2 not in letrs2):
+    while initl1 != 'Q' and initl2 != 'Q' and  initl2 not in letrs2:
         initl2 = getChoice(prompt+' 2?',letrs2, showOpts)
         
     return initl1,initl2
